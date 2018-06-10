@@ -31,54 +31,6 @@ export default class {
     let pointer = 0;
     let programCounter = 0;
 
-    const incPointer = async () => {
-      pointer++;
-    };
-    const decPointer = async () => {
-      pointer--;
-    };
-    const incValue = async () => {
-      memory[pointer] = (memory[pointer] + 1)%CHAR_SIZE;
-    };
-    const decValue = async () => {
-      memory[pointer] = (memory[pointer] - 1 + CHAR_SIZE)%CHAR_SIZE;
-    };
-    const output = async () => {
-      this.outputListener(String.fromCharCode(memory[pointer]));
-    };
-    const input = async () => {
-      while(this.inputQueue.isEmpty()) {
-        // waiting for any input to be added to this.inputQueue
-        await sleep(100);
-        if (this.shouldStop) return;
-      }
-      memory[pointer] = this.inputQueue.dequeue();
-    };
-    const jumpForward = async () => {
-      if (memory[pointer] != 0) return;
-      for(let level=0; ; programCounter++) {
-        if (programCounter<0 || programCounter>=code.length) {
-          this.errorListener("Error: matching `]` command is not found");
-          return;
-        }
-        if (code[programCounter] == '[') level++;
-        if (code[programCounter] == ']') level--;
-        if (level == 0) break;
-      }
-    };
-    const jumpBackward = async () => {
-      if (memory[pointer] == 0) return;
-      for(let level=0; ; programCounter--) {
-        if (programCounter<0 || programCounter>=code.length) {
-          this.errorListener("Error: matching `[` command is not found");
-          return;
-        }
-        if (code[programCounter] == '[') level--;
-        if (code[programCounter] == ']') level++;
-        if (level == 0) break;
-      }
-    };
-
     this.shouldPause = false;
     this.shouldStop = false;
     for(let i=0; i<BUFFER_SIZE; i++) {
@@ -97,15 +49,57 @@ export default class {
         return;
       }
       switch(code[programCounter]) {
-        case '>': await incPointer(); break;
-        case '<': await decPointer(); break;
-        case '+': await incValue(); break;
-        case '-': await decValue(); break;
-        case '.': await output(); break;
-        case ',': await input(); break;
-        case '[': await jumpForward(); break;
-        case ']': await jumpBackward(); break;
-        default: continue;
+        case '>':
+          pointer++;
+          break;
+        case '<':
+          pointer--;
+          break;
+        case '+':
+          memory[pointer] = (memory[pointer] + 1)%CHAR_SIZE;
+          break;
+        case '-':
+          memory[pointer] = (memory[pointer] - 1 + CHAR_SIZE)%CHAR_SIZE;
+          break;
+        case '.':
+          this.outputListener(String.fromCharCode(memory[pointer]));
+          break;
+        case ',':
+          while(this.inputQueue.isEmpty()) {
+            // waiting for any input to be added to this.inputQueue
+            await sleep(100);
+            if (this.shouldStop) return;
+          }
+          memory[pointer] = this.inputQueue.dequeue();
+          break;
+        case '[':
+          if (memory[pointer] == 0) {
+            for(let level=0; ; programCounter++) {
+              if (programCounter<0 || programCounter>=code.length) {
+                this.errorListener("Error: matching `]` command is not found");
+                return;
+              }
+              if (code[programCounter] == '[') level++;
+              if (code[programCounter] == ']') level--;
+              if (level == 0) break;
+            }
+          }
+          break;
+        case ']':
+          if (memory[pointer] != 0) {
+            for(let level=0; ; programCounter--) {
+              if (programCounter<0 || programCounter>=code.length) {
+                this.errorListener("Error: matching `[` command is not found");
+                return;
+              }
+              if (code[programCounter] == '[') level--;
+              if (code[programCounter] == ']') level++;
+              if (level == 0) break;
+            }
+          }
+          break;
+        default:
+          continue;
       }
       this.execListener(pointer, memory);
       if (this.interval > 0) {
