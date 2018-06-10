@@ -49,30 +49,30 @@ export default class {
         return;
       }
       switch(code[programCounter]) {
-        case '>':
+        case '>': {
           pointer++;
-          break;
-        case '<':
+        } break;
+        case '<': {
           pointer--;
-          break;
-        case '+':
+        } break;
+        case '+': {
           memory[pointer] = (memory[pointer] + 1)%CHAR_SIZE;
-          break;
-        case '-':
+        } break;
+        case '-': {
           memory[pointer] = (memory[pointer] - 1 + CHAR_SIZE)%CHAR_SIZE;
-          break;
-        case '.':
+        } break;
+        case '.': {
           this.outputListener(String.fromCharCode(memory[pointer]));
-          break;
-        case ',':
+        } break;
+        case ',': {
           while(this.inputQueue.isEmpty()) {
             // waiting for any input to be added to this.inputQueue
             await sleep(100);
             if (this.shouldStop) return;
           }
           memory[pointer] = this.inputQueue.dequeue();
-          break;
-        case '[':
+        } break;
+        case '[': {
           if (memory[pointer] == 0) {
             for(let level=0; ; programCounter++) {
               if (programCounter<0 || programCounter>=code.length) {
@@ -84,8 +84,8 @@ export default class {
               if (level == 0) break;
             }
           }
-          break;
-        case ']':
+        } break;
+        case ']': {
           if (memory[pointer] != 0) {
             for(let level=0; ; programCounter--) {
               if (programCounter<0 || programCounter>=code.length) {
@@ -97,9 +97,10 @@ export default class {
               if (level == 0) break;
             }
           }
-          break;
-        default:
+        } break;
+        default: {
           continue;
+        }
       }
       this.execListener(pointer, memory);
       if (this.interval > 0) {
