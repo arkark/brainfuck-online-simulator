@@ -133,6 +133,7 @@
           @input="autoScrollBottom('inputHistory', $event)"
           ref="inputHistory"
           readonly
+          disabled
         >
         </b-input>
         <div class="control has-addons-right">
@@ -158,6 +159,7 @@
           @input="autoScrollBottom('output', $event)"
           ref="output"
           readonly
+          disabled
         >
         </b-input>
         <div class="control has-addons-right">
