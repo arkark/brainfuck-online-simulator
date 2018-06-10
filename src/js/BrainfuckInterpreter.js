@@ -63,6 +63,7 @@ export default class {
         } break;
         case '.': {
           this.outputListener(String.fromCharCode(memory[pointer]));
+          await sleep(0);
         } break;
         case ',': {
           while(this.inputQueue.isEmpty()) {
