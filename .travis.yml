@@ -13,6 +13,6 @@ deploy:
   local_dir: dist
   target-branch: gh-pages
   github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-  keep-history: false
+  keep-history: true
   on:
     branch: master
