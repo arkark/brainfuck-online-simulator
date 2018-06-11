@@ -2,10 +2,17 @@
   <footer class="footer">
     <div class="container">
       <div class="content">
+        <p>
+          Brainfuck online editor, interpreter, and simulator :)
+        </p>
+        <p>
+          The source code is licensed under <a href="https://opensource.org/licenses/MIT">MIT</a>
+          <br>&copy; 2018 - Ark
+        </p>
         <div class="field has-addons">
           <div class="control">
             <a
-              class="button is-small"
+              class="button"
               href="https://github.com/ArkArk/brainfuck-online-simulator"
               target="_blank"
             >
@@ -15,7 +22,7 @@
           </div>
           <div class="control">
             <a
-              class="button is-twitter is-small"
+              class="button is-twitter"
               href="https://twitter.com/arkark_"
               target="_blank"
             >
@@ -23,12 +30,10 @@
               <span>Twitter</span>
             </a>
           </div>
-        </div>
-        <p>&copy; 2018 - Ark
-          <br><span style="font-size: xx-small; color: #fff">
+          <span style="font-size: xx-small; color: #fff">
             -[-------&gt;+&lt;]&gt;---.++++++.-----------.++++++.&gt;--[--&gt;+++++&lt;]&gt;.-[-&gt;+++++&lt;]&gt;.[---&gt;+&lt;]&gt;----.[--&gt;+&lt;]&gt;-----.---.-[-----&gt;+&lt;]&gt;--.--------.-[---&gt;+&lt;]&gt;--.+[-&gt;+++&lt;]&gt;+.++++++++.------------.++++++++++.+[--&gt;+&lt;]&gt;.-----[-&gt;++&lt;]&gt;-.+++++++.-[---&gt;+&lt;]&gt;--.-------.[---&gt;+&lt;]&gt;+++.
           </span>
-        </p>
+        </div>
       </div>
     </div>
   </footer>
