@@ -15,6 +15,7 @@ export default class {
     this.errorListener = ()=>{};
     this.finishListener = ()=>{};
     this.inputQueue = new Buckets.Queue();
+    this.parenMap = new Map();
   }
 
   get bufferSize() {
@@ -22,8 +23,33 @@ export default class {
   }
 
   async run(code) {
+    await this._init(code);
     await this._run(code);
     this.finishListener();
+  }
+
+  async _init(code) {
+    this.shouldPause = false;
+    this.shouldStop = false;
+    this.inputQueue.clear();
+    this.parenMap.clear();
+
+    const stack = new Buckets.Stack();
+    for(let programCounter=0; programCounter<code.length; programCounter++) {
+      switch(code[programCounter]) {
+        case '[': {
+          stack.push(programCounter);
+        } break;
+        case ']': {
+          if (!stack.isEmpty()) {
+            let begin = stack.pop();
+            let end = programCounter;
+            this.parenMap.set(begin, end);
+            this.parenMap.set(end, begin);
+          }
+        } break;
+      }
+    }
   }
 
   async _run(code) {
@@ -31,12 +57,9 @@ export default class {
     let pointer = 0;
     let programCounter = 0;
 
-    this.shouldPause = false;
-    this.shouldStop = false;
     for(let i=0; i<BUFFER_SIZE; i++) {
       this.execListener(i, memory);
     }
-    this.inputQueue.clear();
 
     for(; programCounter<code.length; programCounter++) {
       if (this.shouldStop) return;
@@ -75,28 +98,37 @@ export default class {
         } break;
         case '[': {
           if (memory[pointer] == 0) {
-            for(let level=0; ; programCounter++) {
-              if (programCounter<0 || programCounter>=code.length) {
-                this.errorListener("Error: matching `]` command is not found");
-                return;
-              }
-              if (code[programCounter] == '[') level++;
-              if (code[programCounter] == ']') level--;
-              if (level == 0) break;
+            programCounter = this.parenMap.get(programCounter);
+            if (typeof programCounter === 'undefined') {
+              this.errorListener("Error: matching `]` command is not found");
+              return;
             }
+            // for(let level=0; ; programCounter++) {
+            //   if (programCounter<0 || programCounter>=code.length) {
+            //
+            //   }
+            //   if (code[programCounter] == '[') level++;
+            //   if (code[programCounter] == ']') level--;
+            //   if (level == 0) break;
+            // }
           }
         } break;
         case ']': {
           if (memory[pointer] != 0) {
-            for(let level=0; ; programCounter--) {
-              if (programCounter<0 || programCounter>=code.length) {
-                this.errorListener("Error: matching `[` command is not found");
-                return;
-              }
-              if (code[programCounter] == '[') level--;
-              if (code[programCounter] == ']') level++;
-              if (level == 0) break;
+            programCounter = this.parenMap.get(programCounter);
+            if (typeof programCounter === 'undefined') {
+              this.errorListener("Error: matching `[` command is not found");
+              return;
             }
+            // for(let level=0; ; programCounter--) {
+            //   if (programCounter<0 || programCounter>=code.length) {
+            //     this.errorListener("Error: matching `[` command is not found");
+            //     return;
+            //   }
+            //   if (code[programCounter] == '[') level--;
+            //   if (code[programCounter] == ']') level++;
+            //   if (level == 0) break;
+            // }
           }
         } break;
         default: {

@@ -7,7 +7,12 @@
       ></b-input>
     </b-field>
 
-    <b-collapse class="card" :open="false">
+    <b-collapse
+      class="card"
+      :open="visualizingMemory"
+      @open="visualizingMemory = true"
+      @close="visualizingMemory = false"
+    >
       <div slot="trigger" slot-scope="props" class="card-header">
         <p class="card-header-title">
           Memory:
@@ -20,7 +25,11 @@
         </a>
       </div>
       <div class="card-content">
-        <div class="content" style="height: 150px; overflow: scroll;">
+        <div
+          class="content"
+          style="height: 150px; overflow-y: scroll;"
+          v-if="visualizingMemory"
+        >
           <div
             class="is-cell code"
             :class="index==pointer ? 'is-current' : 'is-not-current'"
@@ -194,7 +203,8 @@ export default {
       interval: 0,
       pointer: 0,
       memory: [],
-      memoryShowMode: 0 // dec, hex, char
+      memoryShowMode: 0, // dec, hex, char
+      visualizingMemory: false
     };
   },
   computed: {
