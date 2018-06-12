@@ -16,6 +16,7 @@ export default class {
     this.finishListener = ()=>{};
     this.inputQueue = new Buckets.Queue();
     this.parenMap = new Map();
+    this.dupCountArray = null;
   }
 
   get bufferSize() {
@@ -50,6 +51,18 @@ export default class {
         } break;
       }
     }
+
+    this.dupCountArray = Array.from({length: code.length}, ()=>0);
+    let lastCh = null;
+    let cnt = 0;
+    for(let programCounter=code.length-1; programCounter>=0; programCounter--) {
+      let ch = code[programCounter];
+      if (ch != lastCh || ch=='[' || ch==']' || ch=='.' || ch==',') {
+        lastCh = ch;
+        cnt = 0;
+      }
+      this.dupCountArray[programCounter] = ++cnt;
+    }
   }
 
   async _run(code) {
@@ -61,11 +74,14 @@ export default class {
       this.execListener(i, memory);
     }
 
-    for(; programCounter<code.length; programCounter++) {
+    while(programCounter < code.length) {
+      let optMode = this.interval==0;
+      let dupCount = optMode ? this.dupCountArray[programCounter] : 1;
+
       if (this.shouldStop) return;
       while(this.shouldPause) {
         // waiting for resume
-        await sleep(100);
+        if (Math.random()<0.1)await sleep(100);
       }
       if (pointer<0 || pointer>=BUFFER_SIZE) {
         this.errorListener("Error: out of memory");
@@ -73,16 +89,16 @@ export default class {
       }
       switch(code[programCounter]) {
         case '>': {
-          pointer++;
+          pointer += dupCount;
         } break;
         case '<': {
-          pointer--;
+          pointer -= dupCount;
         } break;
         case '+': {
-          memory[pointer] = (memory[pointer] + 1)%CHAR_SIZE;
+          memory[pointer] = (memory[pointer] + dupCount)%CHAR_SIZE;
         } break;
         case '-': {
-          memory[pointer] = (memory[pointer] - 1 + CHAR_SIZE)%CHAR_SIZE;
+          memory[pointer] = ((memory[pointer] - dupCount)%CHAR_SIZE + CHAR_SIZE)%CHAR_SIZE;
         } break;
         case '.': {
           this.outputListener(String.fromCharCode(memory[pointer]));
@@ -103,14 +119,6 @@ export default class {
               this.errorListener("Error: matching `]` command is not found");
               return;
             }
-            // for(let level=0; ; programCounter++) {
-            //   if (programCounter<0 || programCounter>=code.length) {
-            //
-            //   }
-            //   if (code[programCounter] == '[') level++;
-            //   if (code[programCounter] == ']') level--;
-            //   if (level == 0) break;
-            // }
           }
         } break;
         case ']': {
@@ -120,25 +128,14 @@ export default class {
               this.errorListener("Error: matching `[` command is not found");
               return;
             }
-            // for(let level=0; ; programCounter--) {
-            //   if (programCounter<0 || programCounter>=code.length) {
-            //     this.errorListener("Error: matching `[` command is not found");
-            //     return;
-            //   }
-            //   if (code[programCounter] == '[') level--;
-            //   if (code[programCounter] == ']') level++;
-            //   if (level == 0) break;
-            // }
           }
         } break;
-        default: {
-          continue;
-        }
       }
       this.execListener(pointer, memory);
-      if (this.interval > 0) {
+      if (!optMode) {
         await sleep(this.interval);
       }
+      programCounter += dupCount;
     }
   }
 
