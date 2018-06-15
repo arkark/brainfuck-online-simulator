@@ -137,16 +137,28 @@
       <div class="field">
         <b-input
           type="textarea"
-          :rows="3"
+          :rows="inputHistoryRows"
           v-model="inputHistory"
           @input="autoScrollBottom('inputHistory', $event)"
           ref="inputHistory"
           readonly
         >
         </b-input>
-        <div class="control has-addons-right">
+        <div class="control">
           <button
-            class="button is-dark is-small"
+            class="button is-small"
+            @click="inputHistoryRows = Math.max(1, inputHistoryRows - 1)"
+          >
+            <b-icon pack="fas" icon="angle-double-up"></b-icon>
+          </button>
+          <button
+            class="button is-small"
+            @click="inputHistoryRows++"
+          >
+            <b-icon pack="fas" icon="angle-double-down"></b-icon>
+          </button>
+          <button
+            class="button is-small"
             @click="clearInputHistory"
           >
             <b-icon pack="fas" icon="times"></b-icon>
@@ -162,16 +174,28 @@
       <div class="field">
         <b-input
           type="textarea"
-          :rows="10"
+          :rows="outputRows"
           :value="hasError ? errorMessage : outputMessage"
           @input="autoScrollBottom('output', $event)"
           ref="output"
           readonly
         >
         </b-input>
-        <div class="control has-addons-right">
+        <div class="control">
           <button
-            class="button is-dark is-small"
+            class="button is-small"
+            @click="outputRows = Math.max(1, outputRows - 1)"
+          >
+            <b-icon pack="fas" icon="angle-double-up"></b-icon>
+          </button>
+          <button
+            class="button is-small"
+            @click="outputRows++"
+          >
+            <b-icon pack="fas" icon="angle-double-down"></b-icon>
+          </button>
+          <button
+            class="button is-small"
             @click="clearOutput"
           >
             <b-icon pack="fas" icon="times"></b-icon>
@@ -196,6 +220,8 @@ export default {
       interpreter: new Interpreter(),
       outputMessage: "",
       errorMessage: "",
+      inputHistoryRows: 3,
+      outputRows: 10,
       isRunning: false,
       isPausing: false,
       interval: 0,
