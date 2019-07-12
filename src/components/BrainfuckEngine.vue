@@ -209,7 +209,7 @@
 
 <script>
 import Interpreter from '../js/BrainfuckInterpreter.js';
-import 'bulma-slider/dist/bulma-slider.min.css';
+import 'bulma-slider/dist/css/bulma-slider.min.css';
 
 export default {
   data: function() {

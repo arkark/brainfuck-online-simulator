@@ -9,15 +9,15 @@
   },
   "dependencies": {
     "buckets-js": "^1.98.2",
-    "buefy": "^0.6.6",
-    "bulma-slider": "^1.0.4",
-    "vue": "^2.5.16"
+    "buefy": "^0.7.10",
+    "bulma-slider": "^2.0.0",
+    "vue": "^2.6.10"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.15",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.15",
-    "@vue/cli-service": "^3.0.0-beta.15",
-    "vue-template-compiler": "^2.5.16"
+    "@vue/cli-plugin-babel": "^3.9.2",
+    "@vue/cli-plugin-eslint": "^3.9.2",
+    "@vue/cli-service": "^3.9.2",
+    "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
     "root": true,
