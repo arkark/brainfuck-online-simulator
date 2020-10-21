@@ -172,12 +172,12 @@
 </template>
 
 <script>
-import Interpreter from "../js/BrainfuckInterpreter.js";
+import Interpreter from "@/js/BrainfuckInterpreter.js";
 import "bulma-slider/dist/css/bulma-slider.min.css";
 
 const defaultCode =
   "+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-.------------.<++++++++.--------.+++.------.--------.>+.";
-import puzzleCode from "../../15puzzle-brainfuck/src/15puzzle.bf";
+import puzzleCode from "@/../15puzzle-brainfuck/src/15puzzle.bf";
 
 export default {
   data: function () {
