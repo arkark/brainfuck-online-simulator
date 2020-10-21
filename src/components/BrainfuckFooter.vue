@@ -12,7 +12,7 @@
           <div class="control">
             <a
               class="button"
-              href="https://github.com/ArkArk/brainfuck-online-simulator"
+              href="https://github.com/arkark/brainfuck-online-simulator"
               target="_blank"
             >
               <b-icon pack="fab" icon="github"></b-icon>
