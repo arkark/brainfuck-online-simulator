@@ -25,10 +25,5 @@
     "eslint-plugin-vue": "^7.1.0",
     "prettier": "^2.1.2",
     "vue-template-compiler": "^2.6.10"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  }
 }
