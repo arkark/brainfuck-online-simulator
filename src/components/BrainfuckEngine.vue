@@ -119,7 +119,6 @@
           type="textarea"
           :rows="inputHistoryRows"
           v-model="inputHistory"
-          @input="autoScrollBottom('inputHistory', $event)"
           ref="inputHistory"
           readonly
         >
@@ -147,7 +146,6 @@
           type="textarea"
           :rows="outputRows"
           :value="hasError ? errorMessage : outputMessage"
-          @input="autoScrollBottom('output', $event)"
           ref="output"
           readonly
         >
@@ -209,6 +207,12 @@ export default {
     interval: function (value) {
       this.interpreter.setInterval(value);
     },
+    inputHistory: function () {
+      this.scrollToBottom("inputHistory");
+    },
+    outputMessage: function () {
+      this.scrollToBottom("output");
+    },
   },
   mounted: function () {
     this.interpreter.setOutputListener((ch) => (this.outputMessage += ch));
@@ -252,9 +256,8 @@ export default {
       this.inputHistory += this.inputText + "\n";
       this.inputText = "";
     },
-    autoScrollBottom: function (name, value) {
+    scrollToBottom: function (name) {
       let e = this.$refs[name].$refs.textarea;
-      e.value = value;
       e.scrollTop = e.scrollHeight;
     },
     clearInputHistory: function () {
