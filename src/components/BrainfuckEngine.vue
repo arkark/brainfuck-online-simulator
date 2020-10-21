@@ -175,11 +175,15 @@
 import Interpreter from "../js/BrainfuckInterpreter.js";
 import "bulma-slider/dist/css/bulma-slider.min.css";
 
+const defaultCode =
+  "+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-.------------.<++++++++.--------.+++.------.--------.>+.";
+import puzzleCode from "../../15puzzle-brainfuck/src/15puzzle.bf";
+
 export default {
   data: function () {
+    const code = this.$route.name === "15puzzle" ? puzzleCode : defaultCode;
     return {
-      code:
-        "+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-.------------.<++++++++.--------.+++.------.--------.>+.",
+      code,
       inputText: "",
       inputHistory: "",
       interpreter: new Interpreter(),

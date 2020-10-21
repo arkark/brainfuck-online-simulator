@@ -9,6 +9,10 @@ const routes = [
     name: "top",
   },
   {
+    path: "/15puzzle",
+    name: "15puzzle",
+  },
+  {
     path: "*",
     redirect: { name: "top" },
   },
