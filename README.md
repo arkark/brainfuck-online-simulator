@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/ArkArk/brainfuck-online-simulator.svg?branch=master)](https://travis-ci.org/ArkArk/brainfuck-online-simulator)
-[![license: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/ArkArk/brainfuck-online-simulator/blob/master/LICENSE)
+[![Node.js CI](https://github.com/arkark/brainfuck-online-simulator/workflows/Node.js%20CI/badge.svg)](https://github.com/arkark/brainfuck-online-simulator/actions)
+[![license: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/arkark/brainfuck-online-simulator/blob/master/LICENSE)
 
 # Brainfuck Online Simulator
 
