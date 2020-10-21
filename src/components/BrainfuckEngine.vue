@@ -1,10 +1,7 @@
 <template>
   <section class="engine" height="auto">
     <b-field label="Code:">
-      <b-input
-        type="textarea"
-        v-model="code"
-      ></b-input>
+      <b-input type="textarea" v-model="code"></b-input>
     </b-field>
 
     <b-collapse
@@ -14,51 +11,49 @@
       @close="visualizingMemory = false"
     >
       <div slot="trigger" slot-scope="props" class="card-header">
-        <p class="card-header-title">
-          Memory:
-        </p>
+        <p class="card-header-title">Memory:</p>
         <a class="card-header-icon">
-          <b-icon
-            pack="fas"
-            :icon="props.open ? 'caret-up' : 'caret-down'">
+          <b-icon pack="fas" :icon="props.open ? 'caret-up' : 'caret-down'">
           </b-icon>
         </a>
       </div>
       <div class="card-content">
         <div
           class="content"
-          style="height: 150px; overflow-y: scroll;"
+          style="height: 150px; overflow-y: scroll"
           v-if="visualizingMemory"
         >
           <div
             class="is-cell code"
-            :class="index==pointer ? 'is-current' : 'is-not-current'"
+            :class="index == pointer ? 'is-current' : 'is-not-current'"
             v-for="(value, index) in memory"
             :key="index"
           >
-            {{showValue(value)}}
+            {{ showValue(value) }}
           </div>
         </div>
       </div>
       <div class="card-footer">
-        <nav class="breadcrumb is-centered card-footer-item" aria-label="breadcrumbs">
+        <nav
+          class="breadcrumb is-centered card-footer-item"
+          aria-label="breadcrumbs"
+        >
           <ul>
-            <li :class="memoryShowMode==0 ? `is-active` : ``">
-              <a @click="memoryShowMode=0">dec</a>
+            <li :class="memoryShowMode == 0 ? `is-active` : ``">
+              <a @click="memoryShowMode = 0">dec</a>
             </li>
-            <li :class="memoryShowMode==1 ? `is-active` : ``">
-              <a @click="memoryShowMode=1">hex</a>
+            <li :class="memoryShowMode == 1 ? `is-active` : ``">
+              <a @click="memoryShowMode = 1">hex</a>
             </li>
-            <li :class="memoryShowMode==2 ? `is-active` : ``">
-              <a @click="memoryShowMode=2">char</a>
+            <li :class="memoryShowMode == 2 ? `is-active` : ``">
+              <a @click="memoryShowMode = 2">char</a>
             </li>
           </ul>
         </nav>
       </div>
     </b-collapse>
 
-
-    <div class="level is-mobile" style="margin: 12px 0px;">
+    <div class="level is-mobile" style="margin: 12px 0px">
       <div class="level-left">
         <div class="level-item">
           <div class="field has-addons">
@@ -81,11 +76,7 @@
               </button>
             </div>
             <div class="control">
-              <button
-                class="button"
-                @click="stop"
-                :disabled="!isRunning"
-              >
+              <button class="button" @click="stop" :disabled="!isRunning">
                 <b-icon pack="fas" icon="stop"></b-icon>
               </button>
             </div>
@@ -106,32 +97,21 @@
               max="100"
               step="1"
               v-model="interval"
-              style="margin-right: 0.5em;"
-            >
+              style="margin-right: 0.5em"
+            />
           </b-tooltip>
         </div>
       </div>
     </div>
 
-    <form
-      @submit.prevent="input"
-      style="margin: 12px 0px;"
-    >
+    <form @submit.prevent="input" style="margin: 12px 0px">
       <b-field>
-        <b-input
-          v-model="inputText"
-          :disabled="!isRunning"
-        >
-        </b-input>
+        <b-input v-model="inputText" :disabled="!isRunning"> </b-input>
         <div class="control">
-          <button
-            class="button is-dark"
-            :disabled="!isRunning"
-          >Input</button>
+          <button class="button is-dark" :disabled="!isRunning">Input</button>
         </div>
       </b-field>
     </form>
-
 
     <b-field label="Input history:">
       <div class="field">
@@ -151,26 +131,17 @@
           >
             <b-icon pack="fas" icon="angle-double-up"></b-icon>
           </button>
-          <button
-            class="button is-small"
-            @click="inputHistoryRows++"
-          >
+          <button class="button is-small" @click="inputHistoryRows++">
             <b-icon pack="fas" icon="angle-double-down"></b-icon>
           </button>
-          <button
-            class="button is-small"
-            @click="clearInputHistory"
-          >
+          <button class="button is-small" @click="clearInputHistory">
             <b-icon pack="fas" icon="times"></b-icon>
           </button>
         </div>
       </div>
     </b-field>
 
-    <b-field
-      label="Output:"
-      :type="hasError ? 'is-danger' : ''"
-    >
+    <b-field label="Output:" :type="hasError ? 'is-danger' : ''">
       <div class="field">
         <b-input
           type="textarea"
@@ -188,35 +159,29 @@
           >
             <b-icon pack="fas" icon="angle-double-up"></b-icon>
           </button>
-          <button
-            class="button is-small"
-            @click="outputRows++"
-          >
+          <button class="button is-small" @click="outputRows++">
             <b-icon pack="fas" icon="angle-double-down"></b-icon>
           </button>
-          <button
-            class="button is-small"
-            @click="clearOutput"
-          >
+          <button class="button is-small" @click="clearOutput">
             <b-icon pack="fas" icon="times"></b-icon>
           </button>
         </div>
       </div>
     </b-field>
-
   </section>
 </template>
 
 <script>
-import Interpreter from '../js/BrainfuckInterpreter.js';
-import 'bulma-slider/dist/css/bulma-slider.min.css';
+import Interpreter from "../js/BrainfuckInterpreter.js";
+import "bulma-slider/dist/css/bulma-slider.min.css";
 
 export default {
-  data: function() {
+  data: function () {
     return {
-      code: '+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-.------------.<++++++++.--------.+++.------.--------.>+.',
-      inputText: '',
-      inputHistory: '',
+      code:
+        "+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-.------------.<++++++++.--------.+++.------.--------.>+.",
+      inputText: "",
+      inputHistory: "",
       interpreter: new Interpreter(),
       outputMessage: "",
       errorMessage: "",
@@ -228,87 +193,85 @@ export default {
       pointer: 0,
       memory: [],
       memoryShowMode: 0, // dec, hex, char
-      visualizingMemory: false
+      visualizingMemory: false,
     };
   },
   computed: {
-    hasError: function() {
+    hasError: function () {
       return this.errorMessage.length != 0;
-    }
+    },
   },
   watch: {
-    interval: function(value) {
+    interval: function (value) {
       this.interpreter.setInterval(value);
-    }
+    },
   },
-  mounted: function() {
-    this.interpreter.setOutputListener(
-      (ch) => this.outputMessage += ch
-    );
-    this.interpreter.setExecListener(
-      (pointer, memory) => {
-        this.pointer = pointer;
-        this.$set(this.memory, pointer, memory[pointer]);
-      }
-    );
+  mounted: function () {
+    this.interpreter.setOutputListener((ch) => (this.outputMessage += ch));
+    this.interpreter.setExecListener((pointer, memory) => {
+      this.pointer = pointer;
+      this.$set(this.memory, pointer, memory[pointer]);
+    });
     this.interpreter.setErrorListener(
-      (message) => this.errorMessage = message
+      (message) => (this.errorMessage = message)
     );
     this.interpreter.setFinishListener(() => {
       this.isRunning = false;
       this.isPausing = false;
     });
-    this.memory = Array.from({length: this.interpreter.bufferSize}, ()=>0);
+    this.memory = Array.from({ length: this.interpreter.bufferSize }, () => 0);
   },
   methods: {
-    run: function() {
+    run: function () {
       this.isRunning = true;
       this.inputHistory = "";
       this.outputMessage = "";
       this.errorMessage = "";
       this.interpreter.run(this.code);
     },
-    stop: function() {
+    stop: function () {
       this.resume();
       this.interpreter.stop();
     },
-    pause: function() {
+    pause: function () {
       this.isPausing = true;
       this.interpreter.pause();
     },
-    resume: function() {
+    resume: function () {
       this.interpreter.resume();
       this.isPausing = false;
     },
-    input: function() {
-      for(let ch of this.inputText) {
+    input: function () {
+      for (let ch of this.inputText) {
         this.interpreter.addInput(ch.charCodeAt(0));
       }
-      this.inputHistory += this.inputText + '\n';
-      this.inputText = '';
+      this.inputHistory += this.inputText + "\n";
+      this.inputText = "";
     },
-    autoScrollBottom: function(name, value) {
+    autoScrollBottom: function (name, value) {
       let e = this.$refs[name].$refs.textarea;
       e.value = value;
       e.scrollTop = e.scrollHeight;
     },
-    clearInputHistory: function() {
-      this.inputHistory = '';
+    clearInputHistory: function () {
+      this.inputHistory = "";
     },
-    clearOutput: function() {
-      this.outputMessage = '';
+    clearOutput: function () {
+      this.outputMessage = "";
     },
-    showValue: function(value) {
-      switch(this.memoryShowMode) {
-        case 0: return value;
-        case 1: return '0x'+('00'+value.toString(16)).slice(-2);
+    showValue: function (value) {
+      switch (this.memoryShowMode) {
+        case 0:
+          return value;
+        case 1:
+          return "0x" + ("00" + value.toString(16)).slice(-2);
         case 2:
-          return 0x20<=value && value<=0x7e ?
-            String.fromCodePoint(value) :
-            '0x'+('00'+value.toString(16)).slice(-2);
+          return 0x20 <= value && value <= 0x7e
+            ? String.fromCodePoint(value)
+            : "0x" + ("00" + value.toString(16)).slice(-2);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

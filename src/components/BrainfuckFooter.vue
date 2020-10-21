@@ -2,12 +2,11 @@
   <footer class="footer">
     <div class="container">
       <div class="content">
+        <p>Brainfuck online editor, interpreter, and simulator :)</p>
         <p>
-          Brainfuck online editor, interpreter, and simulator :)
-        </p>
-        <p>
-          The source code is licensed under <a href="https://opensource.org/licenses/MIT">MIT</a>
-          <br>&copy; 2018 - Ark
+          The source code is licensed under
+          <a href="https://opensource.org/licenses/MIT">MIT</a> <br />&copy;
+          2018 - Ark
         </p>
         <div class="field has-addons">
           <div class="control">
@@ -40,12 +39,10 @@
 </template>
 
 <script>
-
 export default {
-  data: function() {
-    return {
-    };
-  }
+  data: function () {
+    return {};
+  },
 };
 </script>
 
