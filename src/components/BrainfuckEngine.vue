@@ -134,6 +134,8 @@
       </b-field>
     </form>
 
+    <b-checkbox v-model="repeatHistory"> Repeat History </b-checkbox>
+
     <b-field label="Input history:">
       <div class="field">
         <b-input
@@ -206,6 +208,7 @@ export default {
       inputText: "",
       inputCode: 0,
       inputHistory: [],
+      repeatHistory: false,
       interpreter: new Interpreter(),
       outputMessage: "",
       errorMessage: "",
@@ -227,7 +230,7 @@ export default {
     inputHistoryText: function () {
       return this.inputHistory
         .map((history) =>
-          history.type == "text" ? history.val : this.toHex(history.val)
+          history.type == "text" ? history.val : this.toChar(history.val)
         )
         .join("\n");
     },
@@ -261,10 +264,26 @@ export default {
   methods: {
     run: function () {
       this.isRunning = true;
-      this.inputHistory = [];
       this.outputMessage = "";
       this.errorMessage = "";
+
       this.interpreter.run(this.code);
+
+      if (this.repeatHistory) {
+        for (const history of this.inputHistory) {
+          switch (history.type) {
+            case "code":
+              this.addCharCode(history.val);
+              break;
+
+            case "text":
+              this.addText(history.val);
+              break;
+          }
+        }
+      } else {
+        this.inputHistory = [];
+      }
     },
     stop: function () {
       this.resume();
