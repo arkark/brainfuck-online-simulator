@@ -108,7 +108,28 @@
       <b-field>
         <b-input v-model="inputText" :disabled="!isRunning"> </b-input>
         <div class="control">
-          <button class="button is-dark" :disabled="!isRunning">Input</button>
+          <button class="button is-dark" :disabled="!isRunning">
+            Input Text
+          </button>
+        </div>
+      </b-field>
+    </form>
+
+    <form @submit.prevent="inputCharCode" style="margin: 12px 0px">
+      <b-field>
+        <b-input
+          v-model.number="inputCode"
+          :disabled="!isRunning"
+          type="number"
+          min="0"
+          max="255"
+          step="1"
+        >
+        </b-input>
+        <div class="control">
+          <button class="button is-dark" :disabled="!isRunning">
+            Input Value
+          </button>
         </div>
       </b-field>
     </form>
@@ -118,7 +139,7 @@
         <b-input
           type="textarea"
           :rows="inputHistoryRows"
-          v-model="inputHistory"
+          v-model="inputHistoryText"
           ref="inputHistory"
           readonly
         >
@@ -183,7 +204,8 @@ export default {
     return {
       code,
       inputText: "",
-      inputHistory: "",
+      inputCode: 0,
+      inputHistory: [],
       interpreter: new Interpreter(),
       outputMessage: "",
       errorMessage: "",
@@ -201,6 +223,13 @@ export default {
   computed: {
     hasError: function () {
       return this.errorMessage.length != 0;
+    },
+    inputHistoryText: function () {
+      return this.inputHistory
+        .map((history) =>
+          history.type == "text" ? history.val : this.toHex(history.val)
+        )
+        .join("\n");
     },
   },
   watch: {
@@ -232,7 +261,7 @@ export default {
   methods: {
     run: function () {
       this.isRunning = true;
-      this.inputHistory = "";
+      this.inputHistory = [];
       this.outputMessage = "";
       this.errorMessage = "";
       this.interpreter.run(this.code);
@@ -249,33 +278,56 @@ export default {
       this.interpreter.resume();
       this.isPausing = false;
     },
-    input: function () {
-      for (let ch of this.inputText) {
+    addText: function (text) {
+      for (let ch of text) {
         this.interpreter.addInput(ch.charCodeAt(0));
       }
-      this.inputHistory += this.inputText + "\n";
+    },
+    addCharCode: function (charCode) {
+      this.interpreter.addInput(charCode);
+    },
+    input: function () {
+      this.addText(this.inputText);
+      this.inputHistory = [
+        ...this.inputHistory,
+        { type: "text", val: this.inputText },
+      ];
       this.inputText = "";
+    },
+    inputCharCode: function () {
+      this.addCharCode(this.inputCode);
+      this.inputHistory = [
+        ...this.inputHistory,
+        { type: "code", val: this.inputCode },
+      ];
+      this.inputCode = 0;
     },
     scrollToBottom: function (name) {
       let e = this.$refs[name].$refs.textarea;
       e.scrollTop = e.scrollHeight;
     },
     clearInputHistory: function () {
-      this.inputHistory = "";
+      this.inputHistory = [];
     },
     clearOutput: function () {
       this.outputMessage = "";
+    },
+    toHex: function (value) {
+      return "0x" + ("00" + value.toString(16)).slice(-2);
+    },
+    toChar: function (value) {
+      return 0x20 <= value && value <= 0x7e
+        ? String.fromCodePoint(value)
+        : this.toHex(value);
     },
     showValue: function (value) {
       switch (this.memoryShowMode) {
         case 0:
           return value;
         case 1:
-          return "0x" + ("00" + value.toString(16)).slice(-2);
+          return this.toHex(value);
         case 2:
-          return 0x20 <= value && value <= 0x7e
-            ? String.fromCodePoint(value)
-            : "0x" + ("00" + value.toString(16)).slice(-2);
+          return this.toChar(value);
       }
     },
   },
