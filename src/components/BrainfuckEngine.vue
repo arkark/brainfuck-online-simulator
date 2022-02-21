@@ -106,10 +106,10 @@
 
     <form @submit.prevent="input" style="margin: 12px 0px">
       <b-field>
-        <b-input v-model="inputText" :disabled="isRunning && !inPause">
+        <b-input v-model="inputText" :disabled="isRunning && inPause">
         </b-input>
         <div class="control">
-          <button class="button is-dark" :disabled="isRunning && !inPause">
+          <button class="button is-dark" :disabled="isRunning && inPause">
             Input Text
           </button>
         </div>
@@ -120,7 +120,7 @@
       <b-field>
         <b-input
           v-model.number="inputCode"
-          :disabled="isRunning && !inPause"
+          :disabled="isRunning && inPause"
           type="number"
           min="0"
           max="255"
@@ -128,7 +128,7 @@
         >
         </b-input>
         <div class="control">
-          <button class="button is-dark" :disabled="isRunning && !inPause">
+          <button class="button is-dark" :disabled="isRunning && inPause">
             Input Value
           </button>
         </div>
