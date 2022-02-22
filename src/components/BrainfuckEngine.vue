@@ -308,10 +308,10 @@ export default {
     },
     input: function () {
       this.addText(this.inputText);
-      this.inputHistory = [
-        ...this.inputHistory,
-        { type: "text", val: this.inputText },
-      ];
+      this.inputHistory.push({
+        type: "text",
+        val: this.inputText,
+      });
       this.inputText = "";
     },
     inputCharCode: function () {
