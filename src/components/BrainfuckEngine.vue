@@ -229,7 +229,7 @@ export default {
     hasError: function () {
       return this.errorMessage.length != 0;
     },
-    isInputDisabled() {
+    isInputDisabled: function () {
       return !this.isRunning && !this.repeatHistory;
     },
     inputHistoryText: function () {
