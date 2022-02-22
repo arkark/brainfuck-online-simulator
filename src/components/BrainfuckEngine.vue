@@ -129,7 +129,7 @@
         </b-input>
         <div class="control">
           <button class="button is-dark" :disabled="isRunning && inPause">
-            Input Value
+            Input Char Code
           </button>
         </div>
       </b-field>
