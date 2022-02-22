@@ -135,8 +135,6 @@
       </b-field>
     </form>
 
-    <b-checkbox v-model="repeatHistory"> Repeat History </b-checkbox>
-
     <b-field label="Input history:">
       <div class="field">
         <b-input
@@ -163,6 +161,8 @@
         </div>
       </div>
     </b-field>
+
+    <b-checkbox v-model="repeatHistory"> Repeat History </b-checkbox>
 
     <b-field label="Output:" :type="hasError ? 'is-danger' : ''">
       <div class="field">
