@@ -316,10 +316,10 @@ export default {
     },
     inputCharCode: function () {
       this.addCharCode(this.inputCode);
-      this.inputHistory = [
-        ...this.inputHistory,
-        { type: "code", val: this.inputCode },
-      ];
+      this.inputHistory.push({
+        type: "code",
+        val: this.inputCode,
+      });
       this.inputCode = 0;
     },
     scrollToBottom: function (name) {
