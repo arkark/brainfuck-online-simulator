@@ -106,10 +106,9 @@
 
     <form @submit.prevent="input" style="margin: 12px 0px">
       <b-field>
-        <b-input v-model="inputText" :disabled="isRunning && inPause">
-        </b-input>
+        <b-input v-model="inputText" :disabled="isInputDisabled"> </b-input>
         <div class="control">
-          <button class="button is-dark" :disabled="isRunning && inPause">
+          <button class="button is-dark" :disabled="isInputDisabled">
             Input Text
           </button>
         </div>
@@ -120,7 +119,7 @@
       <b-field>
         <b-input
           v-model.number="inputCode"
-          :disabled="isRunning && inPause"
+          :disabled="isInputDisabled"
           type="number"
           min="0"
           max="255"
@@ -128,7 +127,7 @@
         >
         </b-input>
         <div class="control">
-          <button class="button is-dark" :disabled="isRunning && inPause">
+          <button class="button is-dark" :disabled="isInputDisabled">
             Input Char Code
           </button>
         </div>
@@ -162,7 +161,9 @@
       </div>
     </b-field>
 
-    <b-checkbox v-model="repeatHistory"> Repeat History </b-checkbox>
+    <b-checkbox v-model="repeatHistory" :disabled="isRunning">
+      Repeat History
+    </b-checkbox>
 
     <b-field label="Output:" :type="hasError ? 'is-danger' : ''">
       <div class="field">
@@ -227,6 +228,9 @@ export default {
   computed: {
     hasError: function () {
       return this.errorMessage.length != 0;
+    },
+    isInputDisabled() {
+      return !this.isRunning && !this.repeatHistory;
     },
     inputHistoryText: function () {
       return this.inputHistory
