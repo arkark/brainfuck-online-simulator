@@ -311,7 +311,6 @@ export default {
       };
       this.addCharCodes(item.codes);
       this.inputHistory.push(item);
-      this.inputCharCode = 0;
     },
     scrollToBottom: function (name) {
       let e = this.$refs[name].$refs.textarea;
