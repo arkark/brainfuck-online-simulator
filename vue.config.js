@@ -8,7 +8,7 @@ module.exports = {
       rules: [
         {
           test: /\.bf$/i,
-          use: "raw-loader",
+          type: "asset/source",
         },
       ],
     },
