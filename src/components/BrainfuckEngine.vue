@@ -39,13 +39,13 @@
           aria-label="breadcrumbs"
         >
           <ul>
-            <li :class="memoryShowMode === 0 ? `is-active` : ``">
+            <li :class="memoryShowMode === 0 ? 'is-active' : ''">
               <a @click="memoryShowMode = 0">dec</a>
             </li>
-            <li :class="memoryShowMode === 1 ? `is-active` : ``">
+            <li :class="memoryShowMode === 1 ? 'is-active' : ''">
               <a @click="memoryShowMode = 1">hex</a>
             </li>
-            <li :class="memoryShowMode === 2 ? `is-active` : ``">
+            <li :class="memoryShowMode === 2 ? 'is-active' : ''">
               <a @click="memoryShowMode = 2">char</a>
             </li>
           </ul>
@@ -104,7 +104,7 @@
       </div>
     </div>
 
-    <form @submit.prevent="input" style="margin: 12px 0px">
+    <form @submit.prevent="submitText" style="margin: 12px 0px">
       <b-field>
         <b-input v-model="inputText" :disabled="isInputDisabled"> </b-input>
         <div class="control">
@@ -115,10 +115,10 @@
       </b-field>
     </form>
 
-    <form @submit.prevent="inputCharCode" style="margin: 12px 0px">
+    <form @submit.prevent="submitCharCode" style="margin: 12px 0px">
       <b-field>
         <b-input
-          v-model.number="inputCode"
+          v-model.number="inputCharCode"
           :disabled="isInputDisabled"
           type="number"
           min="0"
@@ -208,7 +208,7 @@ export default {
     return {
       code,
       inputText: "",
-      inputCode: 0,
+      inputCharCode: 0,
       inputHistory: [],
       repeatHistory: false,
       interpreter: new Interpreter(),
@@ -233,11 +233,7 @@ export default {
       return !this.isRunning && !this.repeatHistory;
     },
     inputHistoryText: function () {
-      return this.inputHistory
-        .map((history) =>
-          history.type === "text" ? history.val : this.toChar(history.val)
-        )
-        .join("\n");
+      return this.inputHistory.map((item) => item.text).join("\n");
     },
   },
   watch: {
@@ -275,16 +271,8 @@ export default {
       this.interpreter.run(this.code);
 
       if (this.repeatHistory) {
-        for (const history of this.inputHistory) {
-          switch (history.type) {
-            case "code":
-              this.addCharCode(history.val);
-              break;
-
-            case "text":
-              this.addText(history.val);
-              break;
-          }
+        for (const item of this.inputHistory) {
+          this.addCharCodes(item.codes);
         }
       } else {
         this.inputHistory = [];
@@ -302,29 +290,28 @@ export default {
       this.interpreter.resume();
       this.isPausing = false;
     },
-    addText: function (text) {
-      for (let ch of text) {
-        this.interpreter.addInput(ch.charCodeAt(0));
+    addCharCodes: function (charCodes) {
+      for (const code of charCodes) {
+        this.interpreter.addInput(code);
       }
     },
-    addCharCode: function (charCode) {
-      this.interpreter.addInput(charCode);
-    },
-    input: function () {
-      this.addText(this.inputText);
-      this.inputHistory.push({
-        type: "text",
-        val: this.inputText,
-      });
+    submitText: function () {
+      const item = {
+        text: this.inputText,
+        codes: Array.from(this.inputText).map((ch) => ch.charCodeAt(0)),
+      };
+      this.addCharCodes(item.codes);
+      this.inputHistory.push(item);
       this.inputText = "";
     },
-    inputCharCode: function () {
-      this.addCharCode(this.inputCode);
-      this.inputHistory.push({
-        type: "code",
-        val: this.inputCode,
-      });
-      this.inputCode = 0;
+    submitCharCode: function () {
+      const item = {
+        text: this.toChar(this.inputCharCode),
+        codes: [this.inputCharCode],
+      };
+      this.addCharCodes(item.codes);
+      this.inputHistory.push(item);
+      this.inputCharCode = 0;
     },
     scrollToBottom: function (name) {
       let e = this.$refs[name].$refs.textarea;
