@@ -25,7 +25,7 @@
         >
           <div
             class="is-cell code"
-            :class="index == pointer ? 'is-current' : 'is-not-current'"
+            :class="index === pointer ? 'is-current' : 'is-not-current'"
             v-for="(value, index) in memory"
             :key="index"
           >
@@ -39,13 +39,13 @@
           aria-label="breadcrumbs"
         >
           <ul>
-            <li :class="memoryShowMode == 0 ? `is-active` : ``">
+            <li :class="memoryShowMode === 0 ? `is-active` : ``">
               <a @click="memoryShowMode = 0">dec</a>
             </li>
-            <li :class="memoryShowMode == 1 ? `is-active` : ``">
+            <li :class="memoryShowMode === 1 ? `is-active` : ``">
               <a @click="memoryShowMode = 1">hex</a>
             </li>
-            <li :class="memoryShowMode == 2 ? `is-active` : ``">
+            <li :class="memoryShowMode === 2 ? `is-active` : ``">
               <a @click="memoryShowMode = 2">char</a>
             </li>
           </ul>
@@ -227,7 +227,7 @@ export default {
   },
   computed: {
     hasError: function () {
-      return this.errorMessage.length != 0;
+      return this.errorMessage.length !== 0;
     },
     isInputDisabled: function () {
       return !this.isRunning && !this.repeatHistory;
@@ -235,7 +235,7 @@ export default {
     inputHistoryText: function () {
       return this.inputHistory
         .map((history) =>
-          history.type == "text" ? history.val : this.toChar(history.val)
+          history.type === "text" ? history.val : this.toChar(history.val)
         )
         .join("\n");
     },

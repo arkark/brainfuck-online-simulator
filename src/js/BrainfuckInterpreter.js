@@ -69,7 +69,13 @@ export default class {
       programCounter--
     ) {
       let ch = code[programCounter];
-      if (ch != lastCh || ch == "[" || ch == "]" || ch == "." || ch == ",") {
+      if (
+        ch !== lastCh ||
+        ch === "[" ||
+        ch === "]" ||
+        ch === "." ||
+        ch === ","
+      ) {
         lastCh = ch;
         cnt = 0;
       }
@@ -87,7 +93,7 @@ export default class {
     }
 
     while (programCounter < code.length) {
-      let optMode = this.interval == 0;
+      let optMode = this.interval === 0;
       let dupCount = optMode ? this.dupCountArray[programCounter] : 1;
 
       if (this.shouldStop) return;
@@ -140,7 +146,7 @@ export default class {
           break;
         case "[":
           {
-            if (memory[pointer] == 0) {
+            if (memory[pointer] === 0) {
               programCounter = this.parenMap.get(programCounter);
               if (typeof programCounter === "undefined") {
                 this.errorListener("Error: matching `]` command is not found");
@@ -151,7 +157,7 @@ export default class {
           break;
         case "]":
           {
-            if (memory[pointer] != 0) {
+            if (memory[pointer] !== 0) {
               programCounter = this.parenMap.get(programCounter);
               if (typeof programCounter === "undefined") {
                 this.errorListener("Error: matching `[` command is not found");
