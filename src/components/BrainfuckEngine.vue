@@ -96,7 +96,7 @@
               min="0"
               max="100"
               step="1"
-              v-model="interval"
+              v-model.number="interval"
               style="margin-right: 0.5em"
             />
           </b-tooltip>

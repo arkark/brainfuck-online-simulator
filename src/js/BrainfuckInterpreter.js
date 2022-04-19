@@ -84,7 +84,7 @@ export default class {
   }
 
   async _run(code) {
-    let memory = Array.from({ length: BUFFER_SIZE }, () => 0);
+    const memory = Array.from({ length: BUFFER_SIZE }, () => 0);
     let pointer = 0;
     let programCounter = 0;
 
@@ -93,8 +93,8 @@ export default class {
     }
 
     while (programCounter < code.length) {
-      let optMode = this.interval === 0;
-      let dupCount = optMode ? this.dupCountArray[programCounter] : 1;
+      const optMode = this.interval === 0;
+      const dupCount = optMode ? this.dupCountArray[programCounter] : 1;
 
       if (this.shouldStop) return;
       while (this.shouldPause) {
